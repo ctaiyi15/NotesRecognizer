@@ -29,7 +29,8 @@ def find_best_match(input_img_path, template_folder_path):
 
 # Usage:
 # the first value of scores is the best match value.
-scores = find_best_match('templates/8.PNG', 'templates')    ######修改这里的templates后面的数字测试不同的数字的读取
+scores = find_best_match('templates/8.PNG', 'templates')    
+######change the num after the templates to test different number or letter
 
 # Print all scores in descending order
 for img_name, score in sorted(scores.items(), key=lambda item: item[1], reverse=True):
