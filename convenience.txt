@@ -1,0 +1,36 @@
+from PIL import Image, ImageFilter
+import os
+import numpy as np
+
+def load_image(path, size=(128, 128)):
+    img = Image.open(path)
+    img = img.convert('L')  # convert image to grayscale
+    img = img.resize(size, Image.LANCZOS)  # resize image
+    return img
+
+def compare_images(img1, img2):
+    img1_array = np.array(img1).flatten()
+    img2_array = np.array(img2).flatten()
+    covariance = np.cov(img1_array, img2_array)[0][1]
+    return covariance
+
+def find_best_match(input_img_path, template_folder_path):
+    input_img = load_image(input_img_path)
+    scores = {}
+
+    # Compare input image to each template image
+    for i in range(10):
+        template_img_path = os.path.join(template_folder_path, f"{i}.PNG")
+        template_img = load_image(template_img_path)
+        covariance = compare_images(input_img, template_img)
+        scores[f"{i}.PNG"] = covariance
+
+    return scores
+
+# Usage:
+# the first value of scores is the best match value.
+scores = find_best_match('templates/8.PNG', 'templates')    ######修改这里的templates后面的数字测试不同的数字的读取
+
+# Print all scores in descending order
+for img_name, score in sorted(scores.items(), key=lambda item: item[1], reverse=True):
+    print(f"{img_name}: {score}")
